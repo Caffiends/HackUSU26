@@ -40,7 +40,7 @@ mkdir -p "$INSTALL_DIR" "$BACKUP_DIR"
 
 # 3. Download Source Code
 git clone "$REPO_URL"
-cp -r ./HackUSU26/src "$INSTALL_DIR/."
+cp ./HackUSU26/src/* "$INSTALL_DIR/."
 chmod +x "$INSTALL_DIR/typo-*"
 
 # 4. Isolated Python Environment
@@ -66,7 +66,7 @@ rm -rf ./HackUSU26
 
 chsh -s "$(which zsh)" "$SUDO_USER"
 echo "✅ $PROJECT successfully installed. Your commands will be logged locally and will not leave your machine."
-echo "Your shame is your own."
+echo "Your SH-ame is your own."
 
 # 8. Restart Shell
 echo "Activating... good luck lol."
