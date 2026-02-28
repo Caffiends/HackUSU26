@@ -1,0 +1,30 @@
+import json
+import sys
+import subprocess
+import difflib
+import shutil
+import sqlite3
+import time
+from pathlib import Path
+
+DB_PATH = Path.home() / ".local/share/typo-stats.db"
+
+def export_for_web():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+
+    # Get Meta Stats
+    meta = {row['key']: row['value'] for row in c.execute("SELECT * FROM meta").fetchall()}
+
+    # Get Top Commands
+    top_cmds = [dict(row) for row in c.execute("SELECT * FROM commands ORDER BY correct DESC LIMIT 5").fetchall()]
+
+    # Get Top Mistypes
+    mistypes = [dict(row) for row in c.execute("SELECT * FROM mistypes ORDER BY count DESC LIMIT 5").fetchall()]
+
+    data = {"meta": meta, "top_cmds": top_cmds, "mistypes": mistypes}
+
+    with open('stats.json', 'w') as f:
+        json.dump(data, f)
+    conn.close()
