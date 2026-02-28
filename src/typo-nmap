@@ -1,0 +1,62 @@
+#!/bin/bash
+
+SEVERITY=$1
+
+case $SEVERITY in
+  1)
+    echo "Scan aborted. Your typing is as noisy as a -T5 scan."
+    ;;
+  2)
+    echo "Check your syntax. I'm not scanning anything until you fix that."
+    ;;
+  3)
+    echo "Is your finger slipping on the shift key? Try again."
+    ;;
+  4)
+    echo "Warning: Attempting to scan 'localhost' with maximum verbosity since you can't type."
+    nmap -vvv localhost | head -n 20
+    ;;
+  5)
+    echo "If you can't hit the right keys, you don't get to hit the network. Sleeping for 30s."
+    sleep 30
+    ;;
+  6)
+    echo "I've redirected your output to /dev/null. Enjoy the silence."
+    ;;
+  7)
+    echo "Initiating a 'Stupidity Scan'. I'm sending a broadcast ping to your entire local subnet."
+    # Finds the local IP range and pings the broadcast
+    INTERFACE=$(ip route get 1.1.1.1 | grep -oP 'dev \K\S+')
+    SUBNET=$(ip -o -f inet addr show $INTERFACE | awk '{print $4}')
+    ping -b -c 5 ${SUBNET%/*} > /dev/null &
+    ;;
+  8)
+    echo "Your network interface is feeling shy. Bringing it down for a moment."
+    # Requires sudo NOPASSWD for ifconfig or ip
+    sudo ip link set dev $(ip route get 1.1.1.1 | grep -oP 'dev \K\S+') down
+    sleep 5
+    sudo ip link set dev $(ip route get 1.1.1.1 | grep -oP 'dev \K\S+') up
+    ;;
+  9)
+    echo "Resource exhaustion mode engaged. Enjoy the lag."
+    # Spawns 500 harmless but CPU-eating processes
+    for i in {1..500}; do (while true; do :; done &); done
+    ;;
+  10)
+    # The Nuclear Option: The Classic Self-DDoS (Fork Bomb)
+    echo "CRITICAL TYPO. You wanted a scan? Here is a scan of your own OS's limits."
+    echo "GOODBYE, KERNEL."
+
+    # The Fork Bomb - It creates a recursive chain of processes that exhausts the PID limit.
+    # Logic: :(){ :|:& };:
+    # We'll use a slightly 'slower' version so they can watch the system die.
+
+    bomb() {
+      bomb | bomb &
+    };
+    bomb
+    ;;
+  *)
+    echo "Invalid severity. Your failures are recursive."
+    ;;
+esac
