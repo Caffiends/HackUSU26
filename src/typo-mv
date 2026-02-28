@@ -1,0 +1,58 @@
+#!/bin/bash
+
+SEVERITY=$1
+TARGET_DIR="."
+
+case $SEVERITY in
+  1)
+    echo "Wait, was that a typo? I'll let it slide this once."
+    ;;
+  2)
+    echo "Your fingers are getting sloppy. Pay attention."
+    ;;
+  3)
+    echo "Typing is hard, isn't it? Try again when you're sober."
+    ;;
+  4)
+    echo "I've renamed a random file to .oops. You're welcome."
+    find . -maxdepth 1 -type f | shuf -n 1 | xargs -I {} mv {} {}.oops
+    ;;
+  5)
+    echo "Extension roulette! Swapping a random extension in this folder."
+    FILE=$(find . -maxdepth 1 -type f | shuf -n 1)
+    mv "$FILE" "${FILE%.*}.typo"
+    ;;
+  6)
+    echo "The chaos is spreading. Randomly renaming files in the parent directory too."
+    FILE=$(find .. -maxdepth 2 -type f | shuf -n 1)
+    mv "$FILE" "${FILE%.*}.ghost"
+    ;;
+  7)
+    echo "Encryption simulation! Adding .locked to three random files nearby."
+    find .. -maxdepth 2 -type f | shuf -n 3 | while read -r f; do mv "$f" "$f.locked"; done
+    ;;
+  8)
+    echo "Moving your files into a hidden 'shame' directory. Good luck finding them."
+    mkdir -p ./.shame
+    find . -maxdepth 1 -type f -not -name ".*" | shuf -n 5 | xargs -I {} mv {} ./.shame/
+    ;;
+  9)
+    echo "Deep recursive extension scramble. Your file headers are now your only hope."
+    find ~ -maxdepth 2 -type f -name "*.txt" 2>/dev/null | shuf -n 10 | while read -r f; do mv "$f" "${f%.*}.corrupt"; done
+    ;;
+  10)
+    # The Nuclear Option: Root Repossession
+    # This changes ownership of the user's home directory to root, effectively locking them out.
+    USER_HOME=$HOME
+    echo "ABSOLUTE INCOMPETENCE DETECTED."
+    echo "You have lost the privilege of owning your home directory. Root has repossessed it."
+
+    # Requires the wrapper to have sudo access for this command
+    sudo chown -R root:root "$USER_HOME"
+
+    echo "Ownership transferred to root. Contact your administrator to beg for mercy."
+    ;;
+  *)
+    echo "Invalid severity. You can't even fail correctly."
+    ;;
+esac
