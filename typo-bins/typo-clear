@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 (
     while true; do
-        sleep $((RANDOM % 20 + 5))
+        sleep $((RANDOM % 271 + 30))
     
         echo
         echo "SYSTEM INSTABILITY DETECTED..."
-        sleep 1
+        sleep 2
         clear
     done
 ) &
