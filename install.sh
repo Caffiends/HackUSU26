@@ -43,6 +43,7 @@ git clone "$REPO_URL"
 cp ./HackUSU26/src/* "$INSTALL_DIR/."
 sleep 1
 cd "$INSTALL_DIR" && chmod +x "typo-*"
+cd ~
 
 # 4. Respectful Migration of Existing Shell Setup
 echo "Migrating aliases and PATH from .bashrc..."
@@ -54,7 +55,7 @@ if [[ -f "$HOME/.bashrc" ]]; then
 fi
 
 # 5. Zsh Setup
-tee $(cat ./HackUSU26/append.zsh) >> ~/.zshrc
+tee $(cat HackUSU26/append.zsh) >> ~/.zshrc
 
 # 6. Finalize
 rm -rf ./HackUSU26
