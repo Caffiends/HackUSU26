@@ -64,7 +64,7 @@ cat ./HackUSU26/append.zsh >> ~/.zshrc
 # 7. Finalize
 rm -rf ./HackUSU26
 
-chsh -s "$(which zsh)" "$SUDO_USER"
+chsh -s "$(which zsh)" "$whoami"
 echo "✅ $PROJECT successfully installed. Your commands will be logged locally and will not leave your machine."
 echo "Your SH-ame is your own."
 
