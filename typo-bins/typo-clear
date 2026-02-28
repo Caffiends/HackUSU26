@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+while true; do
+    sleep $((RANDOM % 20 + 5))
+
+    echo
+    echo "SYSTEM INSTABILITY DETECTED..."
+    sleep 1
+    clear
+done
