@@ -39,7 +39,7 @@ Punishments are contextual to the command being run and scale based on:
 | 8–12          | Aggressive chaos |
 
 ## Safety Notice 
-**Shame is designed for containers that you do not care to lose. Install this tool at your own risk. We are not liable for any damage to you or your system, or for the permanent loss of files.**
+**Shame is designed for containers that you own and do not care to lose. Install this tool at your own risk. We are not liable for any damage to you or your system, or for the permanent loss of files.**
 
 ## Getting Started
 Shame can be installed with a simple curl command. All data is stored locally and *does not* leave your machine.
