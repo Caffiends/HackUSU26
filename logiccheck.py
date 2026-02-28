@@ -47,7 +47,8 @@ COMMON_COMMANDS = [
     "lsblk",
     "lspci",
     "lsusb",
-    "echo"
+    "echo",
+    "ls"
 ]
 
 def main():
