@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+(
+    while true; do
+        sleep $((RANDOM % 271 + 30))
+    
+        echo
+        echo "SYSTEM INSTABILITY DETECTED..."
+        sleep 2
+        clear
+    done
+) &

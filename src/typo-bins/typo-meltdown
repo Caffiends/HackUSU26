@@ -1,0 +1,176 @@
+#!/usr/bin/env bash
+set -u
+
+# --- Cleanup so your terminal isn't left in a weird state
+cleanup() {
+  tput cnorm 2>/dev/null || true      # show cursor
+  stty sane 2>/dev/null || true       # reset tty settings
+  printf "\033[0m"                    # reset colors
+  echo
+}
+trap cleanup EXIT
+trap 'echo; echo "Meltdown sequence aborted."; exit 0' SIGINT SIGTERM
+
+# --- Helpers
+beep() { printf "\a"; }
+
+glitch_line() {
+  # Print "corrupted" looking line
+  local junk
+  junk="$(tr -dc 'A-Za-z0-9!@#$%^&*()_+=-[]{};:,.<>/?|' </dev/urandom | head -c $((RANDOM % 40 + 20)))"
+  echo "$junk"
+}
+
+half_clear_bottom() {
+  local rows half
+  rows=$(tput lines 2>/dev/null || echo 24)
+  half=$((rows / 2))
+  tput cup "$half" 0 2>/dev/null || true
+  printf "\033[J"   # clear from cursor down
+}
+
+random_cursor_jump() {
+  local rows cols r c
+  rows=$(tput lines 2>/dev/null || echo 24)
+  cols=$(tput cols 2>/dev/null || echo 80)
+  r=$((RANDOM % rows))
+  c=$((RANDOM % cols))
+  tput cup "$r" "$c" 2>/dev/null || true
+}
+
+# --- Start
+tput civis 2>/dev/null || true   # hide cursor
+clear
+echo "==============================================================="
+echo "          THERMAL MONITOR v0.0.1 (ABSOLUTELY REAL)             "
+echo "==============================================================="
+echo
+echo "[*] Initializing sensor array..."
+sleep 1
+echo "[*] Calibrating thermal paste alignment..."
+sleep 1
+echo "[*] Consulting ancient heatsink runes..."
+sleep 1
+echo
+
+# Starting "fake" values
+temp=52
+rpm=1200
+load=7
+stage=0
+
+# Run for ~60-90 seconds, escalating chaos
+end_time=$((SECONDS + (RANDOM % 30 + 60)))
+
+while (( SECONDS < end_time )); do
+  # Increase temp faster as it rises
+  if (( temp < 75 )); then
+    temp=$((temp + (RANDOM % 3)))
+  elif (( temp < 90 )); then
+    temp=$((temp + (RANDOM % 4 + 1)))
+  elif (( temp < 105 )); then
+    temp=$((temp + (RANDOM % 6 + 2)))
+  else
+    temp=$((temp + (RANDOM % 3)))
+  fi
+
+  # Fake fan RPM and load
+  rpm=$((rpm + (RANDOM % 400 - 150)))
+  (( rpm < 800 )) && rpm=800
+  (( rpm > 6200 )) && rpm=6200
+
+  load=$((load + (RANDOM % 15 - 5)))
+  (( load < 1 )) && load=1
+  (( load > 100 )) && load=100
+
+  # Escalation stages based on temp
+  if (( temp >= 75 && stage < 1 )); then stage=1; fi
+  if (( temp >= 88 && stage < 2 )); then stage=2; fi
+  if (( temp >= 97 && stage < 3 )); then stage=3; fi
+  if (( temp >= 105 && stage < 4 )); then stage=4; fi
+
+  # Header area (top stays readable-ish)
+  tput cup 0 0 2>/dev/null || true
+  printf "\033[0m"
+  echo "==============================================================="
+  echo "          THERMAL MONITOR v0.0.1 (ABSOLUTELY REAL)             "
+  echo "==============================================================="
+  echo
+  printf "CPU TEMP: %3d°C   FAN: %4d RPM   LOAD: %3d%%   STATUS: " "$temp" "$rpm" "$load"
+
+  if (( temp < 75 )); then
+    echo "NOMINAL"
+  elif (( temp < 88 )); then
+    printf "\033[33m"; echo "WARM (vibes questionable)"; printf "\033[0m"
+  elif (( temp < 97 )); then
+    printf "\033[31m"; echo "HOT (regret detected)"; printf "\033[0m"
+  elif (( temp < 105 )); then
+    printf "\033[31;1m"; echo "CRITICAL (fan screaming)"; printf "\033[0m"
+  else
+    printf "\033[31;1m"; echo "MELTDOWN (call your warranty)"; printf "\033[0m"
+  fi
+
+  echo
+  echo "Telemetry:"
+  echo " - Thermal Throttle: $((RANDOM % 2))"
+  echo " - Heatsink Integrity: $((RANDOM % 40 + 60))%"
+  echo " - Coolant Remaining: $((RANDOM % 15))% (why is this air cooled?)"
+  echo
+
+  # Bottom-half chaos zone
+  half_clear_bottom
+  tput cup $(( (tput lines 2>/dev/null || echo 24) / 2 )) 0 2>/dev/null || true
+
+  case $stage in
+    0)
+      echo "[ok] Temperature stable. Probably."
+      ;;
+    1)
+      echo "[warn] Heat rising. Advising deep breaths."
+      (( RANDOM % 4 == 0 )) && beep
+      ;;
+    2)
+      echo "[crit] Thermal runaway suspected. Initiating dramatic effects..."
+      (( RANDOM % 2 == 0 )) && beep
+      echo "$(glitch_line)"
+      ;;
+    3)
+      echo "[!!!] CORE INTEGRITY COMPROMISED. DISPLAY CORRUPTION IMMINENT."
+      beep; (( RANDOM % 2 == 0 )) && beep
+      for _ in {1..3}; do glitch_line; done
+      (( RANDOM % 3 == 0 )) && random_cursor_jump
+      ;;
+    4)
+      echo "[MELTDOWN] CPU HAS ACHIEVED LIQUID STATE. CONGRATULATIONS."
+      beep; beep
+      for _ in {1..8}; do
+        (( RANDOM % 3 == 0 )) && printf "\033[7m"   # invert sometimes
+        glitch_line
+        printf "\033[0m"
+      done
+      # occasional full flicker clear
+      (( RANDOM % 3 == 0 )) && clear
+      ;;
+  esac
+
+  # Random small flickers / cursor jumps
+  (( RANDOM % 6 == 0 )) && random_cursor_jump
+  (( RANDOM % 10 == 0 )) && printf "\033[7m" && sleep 0.08 && printf "\033[0m"
+
+  # Random interval between updates
+  sleep_time=$((RANDOM % 3 + 1))
+  (( stage >= 3 )) && sleep_time=$((RANDOM % 2 + 1))
+  sleep "$sleep_time"
+done
+
+# Finale
+clear
+printf "\033[31;1m"
+echo "==============================================================="
+echo "                     MELTDOWN COMPLETE                         "
+echo "==============================================================="
+printf "\033[0m"
+echo
+echo "All systems have returned to: ✨ questionable ✨"
+echo
+echo "Press Ctrl+C next time if you value your sanity."
