@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Trap Ctrl+C and mock the user
+trap 'echo; echo "Nice try."; echo "You cannot escape your destiny."; echo' SIGINT
+
 clear
 
 FIRST_NAMES=("Ezekiel" "Magnus" "Aurora" "Seraphina" "Bartholomew" "Luna" "Thaddeus" "Octavia")
