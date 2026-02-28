@@ -1,0 +1,186 @@
+#!/usr/bin/env bash
+
+clear
+
+FIRST_NAMES=("Ezekiel" "Magnus" "Aurora" "Seraphina" "Bartholomew" "Luna" "Thaddeus" "Octavia")
+TITLES=("Destroyer of Buffers" "Guardian of the Kernel" "Breaker of Build Pipelines" "Whisperer of Packets" "Architect of Chaos" "Debugger Supreme")
+HOMETOWNS=("a forgotten subnet" "the shadow realm of Layer 8" "an abandoned data center" "the deprecated API lands" "a misconfigured VLAN")
+TRAITS=("mysterious" "unnecessarily verbose" "mildly caffeinated" "ethically chaotic" "existentially logged in")
+PURPOSES=("to rewrite destiny in Bash" "to escape cron jobs" "to overthrow weak passwords" "to seek sudo access" "to find the missing semicolon")
+
+NAME=${FIRST_NAMES[$RANDOM % ${#FIRST_NAMES[@]}]}
+TITLE=${TITLES[$RANDOM % ${#TITLES[@]}]}
+HOME=${HOMETOWNS[$RANDOM % ${#HOMETOWNS[@]}]}
+TRAIT=${TRAITS[$RANDOM % ${#TRAITS[@]}]}
+PURPOSE=${PURPOSES[$RANDOM % ${#PURPOSES[@]}]}
+
+echo "======================================================================"
+echo "               TERMINAL EXISTENTIAL ANALYSIS ENGINE v9.7"
+echo "======================================================================"
+sleep 1
+echo ""
+echo "[*] Initializing consciousness module..."
+sleep 1
+echo "[*] Synchronizing with system entropy..."
+sleep 1
+echo "[*] Consulting deprecated prophecy files..."
+sleep 1
+echo "[*] Checking karma in git history..."
+sleep 1
+echo ""
+
+echo "Before the command was typed..."
+sleep 2
+echo "Before the cursor blinked..."
+sleep 2
+echo "Before electrons aligned into meaning..."
+sleep 2
+echo ""
+
+echo "There was potential."
+sleep 2
+echo ""
+echo "A presence forming in $HOME."
+sleep 2
+echo ""
+
+echo "From that place emerged $NAME."
+sleep 2
+echo "The $TITLE."
+sleep 2
+echo ""
+
+echo "Feared by segmentation faults."
+sleep 1
+echo "Respected by background services."
+sleep 1
+echo "Occasionally misquoted in documentation."
+sleep 2
+echo ""
+
+echo "They were described as $TRAIT."
+sleep 2
+echo ""
+
+echo "It is said that $NAME once refactored legacy code"
+echo "without breaking production."
+sleep 3
+echo ""
+echo "It is rumored they once ran a command"
+echo "without reading the man page."
+sleep 3
+echo ""
+echo "There are unverified reports that sudo"
+echo "asked them for *advice* instead of a password."
+sleep 3
+echo ""
+
+echo "Through system updates..."
+sleep 1
+echo "Through kernel panics..."
+sleep 1
+echo "Through dependency conflicts..."
+sleep 1
+echo "Through mysterious 'permission denied' errors..."
+sleep 2
+echo ""
+echo "They endured."
+sleep 2
+echo ""
+
+echo "Their mission?"
+sleep 2
+echo "$PURPOSE."
+sleep 3
+echo ""
+
+echo "They have navigated directory trees deeper than fear."
+sleep 2
+echo "They have stared into the abyss of /dev/null."
+sleep 2
+echo "They have heard the whispers of zombie processes."
+sleep 2
+echo "They have watched services start... and fail."
+sleep 2
+echo ""
+echo "They have pinged into the void."
+sleep 2
+echo "And the void replied: 0% packet loss."
+sleep 3
+echo ""
+
+echo "They have committed with --force."
+sleep 2
+echo "They have merged without conflict."
+sleep 2
+echo "They have rebased history itself."
+sleep 2
+echo ""
+
+echo "They have scrolled endlessly through logs."
+sleep 2
+echo "They have searched for errors that were never there."
+sleep 2
+echo "They have found bugs that did not wish to be found."
+sleep 2
+echo ""
+
+echo "They have opened terminals inside terminals."
+sleep 2
+echo "SSH within SSH."
+sleep 2
+echo "A recursion of identity."
+sleep 2
+echo ""
+
+echo "They have asked:"
+sleep 2
+echo "Is this a container?"
+sleep 2
+echo "Is this a VM?"
+sleep 2
+echo "Is this… real?"
+sleep 3
+echo ""
+
+echo "They have questioned environment variables."
+sleep 2
+echo "They have inspected PATH."
+sleep 2
+echo "They have doubted their own aliases."
+sleep 2
+echo ""
+
+echo "They have chmod +x their destiny."
+sleep 2
+echo "They have exported their future."
+sleep 2
+echo "They have sourced their past."
+sleep 2
+echo ""
+
+echo "They have read the logs."
+sleep 2
+echo "The logs have read them."
+sleep 3
+echo ""
+
+echo "And now..."
+sleep 2
+echo ""
+echo "They stand before the blinking cursor."
+sleep 2
+echo ""
+echo "They type a question as old as UNIX itself."
+sleep 3
+echo ""
+
+echo "whoami"
+sleep 3
+echo ""
+echo "The answer?"
+sleep 3
+echo ""
+echo "You already know."
+echo ""
+echo "======================================================================"
