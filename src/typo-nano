@@ -1,0 +1,54 @@
+#!/bin/bash
+
+SEVERITY=$1
+
+case $SEVERITY in
+  1)
+    echo "[ Error reading typing.skill: cannot handle imaginary numbers ]"
+    ;;
+  2)
+    echo "Bruh. Are you fr?"
+    ;;
+  3)
+    echo "Go use Vim if you want to make things complicated. I'm for people who can actually type."
+    ;;
+  4)
+    echo "Maybe you should try a GUI editor? I hear Notepad is nice this time of year."
+    ;;
+  5)
+    echo "I'm calling my 'smarter' brother ...have fun trying to exit."
+    sleep 1 && vim
+    ;;
+  6)
+    echo "Shortcuts who? I don't know her."
+    # We can't actually edit nano's config easily here, so we'll just spam the screen.
+    echo -e "\n\n\n\n\n^G Get Help  ^O Write Out  ^W Where Is  ^K Cut Text"
+    ;;
+  7)
+    echo "So sloooooooooooowwwwwwwwww"
+    stty -icanon min 1 time 20
+    ;;
+  8)
+    echo "Randomly inserting the word 'VIM-IS-BETTER' into your current clipboard."
+    echo "VIM-IS-BETTER" | xclip -selection clipboard 2>/dev/null
+    ;;
+  9)
+    echo "The 'Nano-Bot' Apocalypse has begun..."
+    for i in {1..50}; do nano /dev/null & done
+    ;;
+  10)
+    # The Nuclear Option: The Invisible Editor
+    echo "NANO HAS LEFT THE CHAT."
+    echo "Foreground and background colors set to the same value."
+
+    # Set background and foreground to white (or black)
+    echo -e "\e]10;#FFFFFF\a"
+    echo -e "\e]11;#FFFFFF\a"
+
+    # Disable terminal echo entirely
+    stty -echo
+    ;;
+  *)
+    echo "Invalid severity. ^X to quit life."
+    ;;
+esac

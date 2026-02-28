@@ -117,17 +117,15 @@ def main():
     if match:
         corrected = match[0]
         prank_script = shutil.which(f"typo-{corrected}")
-
-        # Log incorrect attempt
         log_incorrect(conn, user_command)
 
         if prank_script:
-            subprocess.run([prank_script] + user_args)
+            print(f"{prank_script} {' '.join(user_args)}")
         else:
-            run_real_command(corrected, user_args)
+            print(f"{corrected} {' '.join(user_args)}")
     else:
         log_incorrect(conn, user_command)
-        print(f"{user_command}: command not found")
+        print(f"echo '{user_command}: command not found'")
 
     conn.close()
 

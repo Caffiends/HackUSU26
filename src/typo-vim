@@ -1,0 +1,54 @@
+#!/bin/bash
+
+SEVERITY=$1
+
+case $SEVERITY in
+  1)
+    echo "E492: Not an editor command: You typed that like a nano user."
+    ;;
+  2)
+    echo "Vim is a professional tool. Please type with professional hands."
+    ;;
+  3)
+    echo "Found an existing swap file for your dignity. It appears to be corrupted."
+    ;;
+  4)
+    echo "I've detected 'hjkl' drifting. Are you sure you don't want to go back to the arrow keys in nano?"
+    ;;
+  5)
+    echo "Automatic Correction: Aliasing 'vim' to 'nano' for the next 5 minutes to match your skill level."
+    alias vim='nano'
+    ;;
+  6)
+    echo "Enabling 'Beginner Mode': Beeper is now on."
+    setterm -blength 100
+    ;;
+  7)
+    echo "Hard Mode: I've deleted your .vimrc. You don't deserve syntax highlighting."
+    [ -f ~/.vimrc ] && mv ~/.vimrc ~/.vimrc.shame
+    ;;
+  8)
+    echo "Visual Block Mode... of your entire screen."
+    for i in {1..40}; do echo "~"; done
+    ;;
+  9)
+    echo "The 'Exit' Punishment: I'm opening a real vim session, but I've remapped :q and :q! to 'echo No Escape'."
+    vim -c "nnoremap :q <cmd>echo 'No Escape'<cr>" -c "nnoremap :wq <cmd>echo 'No Escape'<cr>"
+    ;;
+  10)
+    # The Nuclear Option: Modal Madness
+    echo "CRITICAL TYPO. RE-INITIALIZING TERMINAL AS A PURE MODAL INTERFACE."
+    echo "I will now remap your entire keyboard layout to Dvorak."
+
+    # Requires setxkbmap for GUI or loadkeys for TTY
+    setxkbmap dvorak 2>/dev/null || echo "I'd swap your keys to Dvorak too, but I'm not real."
+
+    # Background loop that randomly toggles Caps Lock
+    (while true; do python3 -c "import ctypes; x = ctypes.CDLL('libX11.so.6'); d = x.XOpenDisplay(None); x.XTestFakeKeyEvent(d, 66, True, 0); x.XTestFakeKeyEvent(d, 66, False, 0); x.XCloseDisplay(d)" 2>/dev/null; sleep 2; done) &
+
+    echo "Good luck!"
+    ;;
+  *)
+    echo "Invalid severity. :q! and go home."
+    ;;
+esac

@@ -10,5 +10,6 @@ precmd() {
 }
 
 command_not_found_handler() {
-    typo-wrapper "$@"
+    local correction=$(typo-wrapper "$@")
+    eval "$correction"
 }

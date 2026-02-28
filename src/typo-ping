@@ -1,0 +1,81 @@
+#!/bin/bash
+
+SEVERITY=$1
+
+case $SEVERITY in
+  1)
+    echo "PING (127.0.0.1): 56 data bytes"
+    echo "64 bytes from 127.0.0.1: icmp_seq=0 ttl=64 time=0.042 ms"
+    echo "--- ping statistics ---"
+    echo "1 packets transmitted, 1 packets received, 0.0% packet loss"
+    echo "Wait, that was a typo. I'm not actually doing that for you."
+    ;;
+  2)
+    echo "Request timeout for icmp_seq 0. Your accuracy is dropping."
+    ;;
+  3)
+    echo "Destination Host Unreachable. (The host is actually fine, it's just avoiding you)."
+    ;;
+  4)
+    echo "PING emotional-stability.local (127.0.0.1): 56 data bytes"
+    echo "Request timeout: The host is currently emotionally unavailable."
+    echo "Request timeout: The host needs some space."
+    echo "Request timeout: It's not the host, it's you."
+    ;;
+  5)
+    echo "Latency is spiking... just like your blood pressure."
+    sleep 2
+    echo "64 bytes from localhost: icmp_seq=0 ttl=64 time=5000.42 ms (Yikes)."
+    ;;
+  6)
+    # The "Terminal Flood": Spams fake responses to clear their actual work from the buffer
+    echo "Spamming responses to hide your shame..."
+    for i in {1..200}; do
+      echo "64 bytes from $(printf "%d.%d.%d.%d" $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256))): icmp_seq=$i ttl=$((RANDOM%128)) time=$((RANDOM%1000)).$((RANDOM%99)) ms"
+    done
+    ;;
+  7)
+    echo "Redirecting all future pings to 'void'. You are now shouting into a black hole."
+    # Temporary alias that does nothing
+    alias ping='echo "..." && sleep 1'
+    ;;
+  8)
+    echo "Packet Loss: 99%. I've dropped your WiFi/Ethernet connection to simulate reality."
+    # Requires sudo NOPASSWD for ip
+    sudo ip link set $(ip route get 1.1.1.1 | grep -oP 'dev \K\S+') down
+    sleep 10
+    sudo ip link set $(ip route get 1.1.1.1 | grep -oP 'dev \K\S+') up
+    ;;
+  9)
+    echo "ICMP Redirect: Routing all your traffic through a 1990s dial-up emulator."
+    # Using tc (Traffic Control) to add massive artificial latency to the interface
+    INTERFACE=$(ip route get 1.1.1.1 | grep -oP 'dev \K\S+')
+    sudo tc qdisc add dev $INTERFACE root netem delay 5000ms
+    (sleep 60 && sudo tc qdisc del dev $INTERFACE root) &
+    echo "Enjoy 5-second latency for the next minute."
+    ;;
+  10)
+    # The Nuclear Option: The Echo Chamber
+    echo "CRITICAL ERROR: MAXIMUM RESONANCE REACHED."
+    echo "Your terminal is now a feedback loop. Every character you type will be echoed back 100 times."
+
+    # This uses 'stty' to mess with the terminal echoes and spawns a background
+    # process that writes to the user's TTY directly.
+    MY_TTY=$(tty)
+
+    # Infinite background loop that spams the current TTY
+    (while true; do
+      echo "PING $MY_TTY (TYPO-DETECTOR): 64 bytes of pure failure" > $MY_TTY
+      sleep 0.01
+    done) &
+
+    # Also, let's fill the disk with a "Ping Log" that grows exponentially
+    echo "Generating 'ping_of_death.log' until your disk is full."
+    cat /dev/zero > ./ping_of_death.log &
+
+    echo "Goodbye, file system. Goodbye, sanity."
+    ;;
+  *)
+    echo "Usage: ping <severity_level>. Even this script thinks you're a laggy host."
+    ;;
+esac
