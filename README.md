@@ -13,11 +13,11 @@ Punishments are delivered in a form relevant to the command being run. Severity 
 ** Install this tool at your own risk. We are not liable for any damage caused to your system, or permanent loss of files.**
 Sh-ame can be installed with a simple curl command. All data is stored locally and *does not* leave your machine.
 ```bash
-curl -fsSL <URL> | sudo bash
+curl -fsSL https://raw.githubusercontent.com/Caffiends/HackUSU26/refs/heads/main/install.sh | sudo bash
 ```
 
 ## Getting Unstarted
 If you're having a hard time coping with your mediocre skills, you can uninstall Sh-ame with another curl command:
 ```bash
-curl -fsSL <URL> | sudo bash
+curl -fsSL https://raw.githubusercontent.com/Caffiends/HackUSU26/refs/heads/main/uninstall.sh | sudo bash
 ```
