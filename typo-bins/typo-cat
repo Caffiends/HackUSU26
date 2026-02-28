@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# upside-down cat using awk
+
+awk '
+BEGIN {
+  normal  = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!"
+  flipped = "ɐqɔpǝɟƃɥᴉɾʞʞlɯuodbɹsʇnʌʍxʎz∀𐐒Ɔ◖ƎℲ⅁HIſʞ⅂WNOԀΌᴚS┴∩ΛMXʎZ0ƖᄅƐㄣϛ9˙¿¡"
+}
+{
+  line=""
+  for (i = length($0); i > 0; i--) {
+    c = substr($0, i, 1)
+    pos = index(normal, c)
+    if (pos > 0)
+      line = line substr(flipped, pos, 1)
+    else
+      line = line c
+  }
+  print line
+}
+' "$@"
