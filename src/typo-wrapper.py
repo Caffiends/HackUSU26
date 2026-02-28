@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/env python3
 
 import sys
 import subprocess
@@ -11,52 +11,12 @@ from pathlib import Path
 # ------------------------
 # Configuration
 # ------------------------
-
 COMMON_COMMANDS = [
-    "zip",
-    "sudo",
-    "mv",
-    "cat",
-    "ps",
-    "rm",
-    "mount",
-    "dd",
-    "nmap",
-    "dig",
-    "nslookup",
-    "ipconfig",
-    "whoami",
-    "docker",
-    "paste",
-    "vim",
-    "vi",
-    "git",
-    "clear",
-    "ping",
-    "man",
-    "touch",
-    "mkdir",
-    "arp",
-    "neofetch",
-    "fastfetch",
-    "grep",
-    "iptables",
-    "rmdir",
-    "passwd",
-    "traceroute",
-    "curl",
-    "wget",
-    "kill",
-    "pskill",
-    "ps",
-    "date",
-    "time",
-    "trap",
-    "lsblk",
-    "lspci",
-    "lsusb",
-    "echo",
-    "ls"
+    "zip","sudo","mv","cat","ps","rm","mount","dd","nmap","dig","nslookup",
+    "ipconfig","whoami","docker","paste","vim","vi","git","clear","ping",
+    "man","touch","mkdir","arp","neofetch","fastfetch","grep","iptables",
+    "rmdir","passwd","traceroute","curl","wget","kill","pskill","ps","date",
+    "time","trap","lsblk","lspci","lsusb","echo","ls"
 ]
 
 DB_PATH = Path.home() / ".local/share/typo-stats.db"
@@ -64,18 +24,9 @@ DB_PATH = Path.home() / ".local/share/typo-stats.db"
 # ------------------------
 # Database Setup
 # ------------------------
-
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-
-    c.execute("""
-    CREATE TABLE IF NOT EXISTS meta (
-        key TEXT PRIMARY KEY,
-        value INTEGER
-    )
-    """)
-
     c.execute("""
     CREATE TABLE IF NOT EXISTS commands (
         name TEXT PRIMARY KEY,
@@ -85,15 +36,20 @@ def init_db():
         current_streak INTEGER DEFAULT 0
     )
     """)
-
     c.execute("""
     CREATE TABLE IF NOT EXISTS mistypes (
         name TEXT PRIMARY KEY,
         count INTEGER DEFAULT 0
     )
     """)
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS meta (
+        key TEXT PRIMARY KEY,
+        value INTEGER
+    )
+    """)
 
-    # Initialize meta values if missing
+    # Ensure meta keys exist
     for key in [
         "total_commands",
         "correct",
@@ -104,7 +60,7 @@ def init_db():
     ]:
         c.execute("INSERT OR IGNORE INTO meta VALUES (?, ?)", (key, 0))
 
-    # Ensure start_time is set
+    # Set start_time
     c.execute("SELECT value FROM meta WHERE key='start_time'")
     if c.fetchone()[0] == 0:
         c.execute("UPDATE meta SET value=? WHERE key='start_time'", (int(time.time()),))
@@ -113,63 +69,31 @@ def init_db():
     return conn
 
 # ------------------------
-# Logging Logic
+# Logging Incorrect
 # ------------------------
-
-def log_command(conn, command, correct):
+def log_incorrect(conn, command):
     c = conn.cursor()
-
-    # Update totals
     c.execute("UPDATE meta SET value = value + 1 WHERE key='total_commands'")
+    c.execute("UPDATE meta SET value = value + 1 WHERE key='incorrect'")
+    c.execute("UPDATE meta SET value = 0 WHERE key='current_correct_streak'")
 
-    if correct:
-        c.execute("UPDATE meta SET value = value + 1 WHERE key='correct'")
-        c.execute("UPDATE meta SET value = value + 1 WHERE key='current_correct_streak'")
-
-        # Update max streak
-        c.execute("SELECT value FROM meta WHERE key='current_correct_streak'")
-        current = c.fetchone()[0]
-
-        c.execute("SELECT value FROM meta WHERE key='max_correct_streak'")
-        max_streak = c.fetchone()[0]
-
-        if current > max_streak:
-            c.execute("UPDATE meta SET value=? WHERE key='max_correct_streak'", (current,))
-
-        # Update per-command stats
-        c.execute("""
-        INSERT INTO commands(name, correct, incorrect, max_streak, current_streak)
-        VALUES (?, 1, 0, 1, 1)
-        ON CONFLICT(name) DO UPDATE SET
-            correct = correct + 1,
-            current_streak = current_streak + 1,
-            max_streak = MAX(max_streak, current_streak + 1)
-        """, (command,))
-
-    else:
-        c.execute("UPDATE meta SET value = value + 1 WHERE key='incorrect'")
-        c.execute("UPDATE meta SET value = 0 WHERE key='current_correct_streak'")
-
-        c.execute("""
-        INSERT INTO mistypes(name, count)
-        VALUES (?, 1)
-        ON CONFLICT(name) DO UPDATE SET
-            count = count + 1
-        """, (command,))
-
+    c.execute("""
+    INSERT INTO mistypes(name, count)
+    VALUES (?, 1)
+    ON CONFLICT(name) DO UPDATE SET
+        count = count + 1
+    """, (command,))
     conn.commit()
 
 # ------------------------
-# Command Execution Logic
+# Command Execution
 # ------------------------
-
 def run_real_command(command, args):
     full_path = shutil.which(command)
     if full_path:
         subprocess.run([full_path] + args)
         return True
     return False
-
 
 def main():
     if len(sys.argv) < 2:
@@ -180,9 +104,9 @@ def main():
 
     conn = init_db()
 
-    # If real command exists → run normally
+    # Real command exists → just run
     if shutil.which(user_command):
-        log_command(conn, user_command, True)
+        # Do NOT log correct commands here
         subprocess.run([user_command] + user_args)
         conn.close()
         return
@@ -195,20 +119,17 @@ def main():
         prank_script = shutil.which(f"typo-{corrected}")
 
         # Log incorrect attempt
-        log_command(conn, user_command, False)
+        log_incorrect(conn, user_command)
 
         if prank_script:
             subprocess.run([prank_script] + user_args)
         else:
-            # fallback to real command
             run_real_command(corrected, user_args)
-
     else:
-        log_command(conn, user_command, False)
+        log_incorrect(conn, user_command)
         print(f"{user_command}: command not found")
 
     conn.close()
-
 
 if __name__ == "__main__":
     main()
