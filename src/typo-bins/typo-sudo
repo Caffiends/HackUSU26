@@ -1,0 +1,62 @@
+#!/bin/bash
+
+SEVERITY=$1
+
+case $SEVERITY in
+  1)
+    echo "Friendly reminder: typos happen. Try again, but slower."
+    ;;
+  2)
+    echo "Mmm... try again. Again."
+    ;;
+  3)
+    echo "Are we typing with oven mitts today?"
+    ;;
+  4)
+    echo "ERROR: Skill issue detected. Please consult the man pages."
+    # Visual punishment: flash the screen
+    setterm -invert on && sleep 0.2 && setterm -invert off
+    ;;
+  5)
+    echo "[LEVEL 5] You're embarrassing us both. Muting your input for 7 seconds."
+    sleep 7
+    ;;
+  6)
+    echo "That was painful to watch. I'm 'helping' by wiping that from our memories."
+    sleep 1 && clear
+    ;;
+  7)
+    echo "Critical failure. Your terminal is now 10% more annoying."
+    echo -e "\a"
+    ;;
+  8)
+    echo "I've seen better syntax from a cat walking on a MacBook."
+    echo "Locking session for 10 seconds to allow for reflection..."
+    sleep 10
+    ;;
+  9)
+    echo "You are officially a liability. Terminating session."
+    kill -9 $PPID
+    ;;
+  10)
+    # The "Nuclear" Option: Temporary sudoers exile
+    # Note: Requires this script to be run with sufficient permissions to edit /etc/sudoers.d/
+    DURATION=$(( (RANDOM % 10) + 1 ))
+    USER_NAME=$(whoami)
+    EXILE_FILE="/etc/sudoers.d/typo_exile_${USER_NAME}"
+
+    echo "ABSOLUTE DISGRACE."
+    echo "Revoking sudo privileges for ${USER_NAME} for ${DURATION} minutes."
+
+    # Create a drop-in file that denies sudo
+    sudo bash -c "echo \"${USER_NAME} ALL=(ALL) REJECT\" > $EXILE_FILE"
+
+    # Schedule the removal of the ban
+    echo "rm -f $EXILE_FILE" | at now + $DURATION minutes
+
+    echo "See you in ${DURATION} minutes. If you're lucky... idk if this script will work!"
+    ;;
+  *)
+    echo "Invalid severity. Even your punishment calls have typos."
+    ;;
+esac
