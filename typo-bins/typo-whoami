@@ -1,0 +1,86 @@
+#!/bin/bash
+
+clear
+
+echo "===================================================================="
+echo "           INITIATING HUMAN-INTERFACE IDENTITY RESOLUTION           "
+echo "===================================================================="
+sleep 1
+
+echo ""
+echo "[*] Establishing connection to kernel authentication subsystem..."
+sleep 1
+echo "[*] Parsing environment variables..."
+sleep 1
+echo "[*] Querying /etc/passwd..."
+sleep 1
+echo "[*] Verifying group memberships..."
+sleep 1
+echo "[*] Cross-referencing shadow identity records..."
+sleep 1
+
+USER_NAME=$(id -un)
+USER_ID=$(id -u)
+GROUP_ID=$(id -g)
+GROUPS=$(id -Gn)
+HOST_NAME=$(hostname)
+KERNEL=$(uname -r)
+ARCH=$(uname -m)
+UPTIME=$(uptime -p)
+IP_ADDR=$(hostname -I | awk '{print $1}')
+CURRENT_TIME=$(date)
+
+echo ""
+echo "===================================================================="
+echo "                        DIGITAL IDENTITY REPORT                     "
+echo "===================================================================="
+echo ""
+echo "Username:                  $USER_NAME"
+echo "User ID (UID):             $USER_ID"
+echo "Primary Group ID (GID):    $GROUP_ID"
+echo "Supplementary Groups:      $GROUPS"
+echo "Host System:               $HOST_NAME"
+echo "Kernel Version:            $KERNEL"
+echo "Architecture:              $ARCH"
+echo "Primary IPv4 Address:      $IP_ADDR"
+echo "System Uptime:             $UPTIME"
+echo "Session Timestamp:         $CURRENT_TIME"
+echo ""
+
+sleep 1
+echo "[*] Performing privilege classification..."
+sleep 2
+
+if [ "$USER_ID" -eq 0 ]; then
+    echo ""
+    echo "⚠ WARNING: ROOT ENTITY DETECTED"
+    echo "You possess unrestricted command authority."
+    echo "The system trembles at your keystrokes."
+else
+    echo ""
+    echo "Standard user privileges confirmed."
+    echo "You are a constrained yet authenticated participant."
+fi
+
+sleep 1
+echo ""
+echo "--------------------------------------------------------------------"
+echo "Identity Confirmation:"
+echo ""
+echo "You are $USER_NAME."
+echo "Authenticated under UID $USER_ID."
+echo "Operating on host $HOST_NAME."
+echo ""
+echo "This shell recognizes you."
+echo "The kernel recognizes you."
+echo "The filesystem recognizes you."
+echo ""
+sleep 2
+echo "But the question persists..."
+sleep 2
+echo ""
+echo "Who are you... beyond the UID?"
+echo ""
+echo "--------------------------------------------------------------------"
+echo "Identity resolution complete."
+echo "===================================================================="
