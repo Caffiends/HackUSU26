@@ -1,16 +1,47 @@
 # Shame
-Welcome to Shame (sh-ame), a terminal tool for the overconfident.
+Welcome to Shame, a gamified zsh tool designed to humble your command-line ego.
 
 ## About Shame
-Have you ever felt like you're too good at using the Linux terminal? Wish you could make performing system commands exciting again?
-Well look no further!
+Ever felt like you're too good at the Linux terminal?
+Wish typing commands felt exciting again?
 
-Shame is a gamified `zsh` tool designed to reveal weaknesses in muscle memory, finger fatness, and CLI knowledge by punishing the user for typos or errors. The concept is based on the **Pressure Paradox**, a psychological phenomena where as pressure on an individual increases, performance degrades. Shame harnesses this human weakness simply: the more you mess up, the worse the punishments get. The only way to reverse the punishments? Get good, stay good.
+Shame brings consequences back to the CLI.
 
-Punishments are delivered in a form relevant to the command being run. Severity ramps up or down based on your calculated competence with that specific command and the CLI in general. They range from warnings, to snarky comments about your skills, to changing your password, and other fun activities guaranteed to have you second-guessing that carriage return. You'll even get a stats "wrapped" report just like every other cool platform these days (thanks Spotify).
+Shame is a gamified shell extension that detects typos and command errors, then escalates punishments based on your failure rate. It is built around the Pressure Paradox.
+
+Shame weaponizes this concept. The more you mess up, the worse it gets.
+- Mistakes increase pressure.
+- Pressure increases mistakes.
+- You spiral.
+
+The only way out?
+- Get good. Stay good.
+
+## How It Works
+Shame wraps common shell commands and:
+- Tracks incorrect command usage
+- Maintains per-command competence scores
+- Applies escalating punishments
+- Dynamically adjusts probability of disruption
+- Generates a periodic “Shame Wrapped” performance report
+
+Punishments are contextual to the command being run and scale based on:
+- Frequency of typos
+- Historical performance
+- CLI-wide failure rate
+
+## Escalation Levels
+
+| Mistake Count | Behavior |
+|---------------|----------|
+| 1–3           | Minor annoyance |
+| 4–7           | Random disruptions |
+| 8–12          | Aggressive chaos |
+
+## Safety Notice 
+** Shame is designed for containers that you do not care to lose. Install this tool at your own risk. We are not liable for any damage to you or your system, or for the permanent loss of files. **
 
 ## Getting Started
-** Install this tool at your own risk. We are not liable for any damage caused to your system, or permanent loss of files.**
 Shame can be installed with a simple curl command. All data is stored locally and *does not* leave your machine.
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Caffiends/HackUSU26/refs/heads/main/install.sh | sudo bash
@@ -21,3 +52,6 @@ If you're having a hard time coping with your mediocre skills, you can uninstall
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Caffiends/HackUSU26/refs/heads/main/uninstall.sh | sudo bash
 ```
+
+## Why We Built This
+For a hackathon's gag/cursed tool category. 
