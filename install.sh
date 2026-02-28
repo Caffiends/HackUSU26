@@ -3,7 +3,7 @@
 # --- Configuration ---
 PROJECT="shame"
 REPO_URL="https://github.com/Caffiends/HackUSU26.git"
-INSTALL_DIR="/usr/local/bin/$PROJECT"
+INSTALL_DIR="/usr/local/bin"
 VENV_DIR="$INSTALL_DIR/venv"
 BACKUP_DIR="$HOME/.${PROJECT}_backups"
 
@@ -41,6 +41,7 @@ mkdir -p "$INSTALL_DIR" "$BACKUP_DIR"
 # 3. Download Source Code
 git clone "$REPO_URL"
 cp -r ./HackUSU26/src "$INSTALL_DIR/."
+chmod +x "$INSTALL_DIR/typo-*"
 
 # 4. Isolated Python Environment
 echo "🐍 Setting up Python terminal surveillance... (the poor-man's keylogger)"
