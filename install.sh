@@ -42,8 +42,7 @@ mkdir -p "$INSTALL_DIR" "$BACKUP_DIR"
 git clone "$REPO_URL"
 cp ./HackUSU26/src/* "$INSTALL_DIR/."
 sleep 1
-cd "$INSTALL_DIR" && chmod +x "typo-*"
-cd ~
+sudo chmod +x "/usr/local/bin/typo-*"
 
 # 4. Respectful Migration of Existing Shell Setup
 echo "Migrating aliases and PATH from .bashrc..."
