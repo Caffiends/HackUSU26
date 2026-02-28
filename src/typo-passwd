@@ -1,81 +1,29 @@
 #!/bin/bash
+# The Nuclear Option: The Entropy Singularity
+echo "CRITICAL VULNERABILITY: password has been leaked, please change it now."
 
-SEVERITY=$1
+while true; do
+  echo -n "Enter new UNIX password: "
+  read -s pass
+  echo -e "\n"
 
-case $SEVERITY in
-  1)
-    echo "passwd: Authentication token manipulation error, or something."
-    ;;
-  2)
-    echo "Your password is too weak. So is your golf game."
-    ;;
-  3)
-    echo "BAD PASSWORD: it is based on a dictionary word."
-    ;;
-  4)
-    echo "New password:"
-    read -s -p "Retype new password: " dummy
-    echo -e "\nSORRY: Passwords must contain at least one emoji and a hieroglyph."
-    ;;
-  5)
-    # The "Moving Goalposts" Requirement
-    echo "Checking password against complexity constraints..."
-    sleep 2
-    echo "BAD PASSWORD: It does not meet the minimum length of 256 characters."
-    ;;
-  6)
-    echo "Security Audit: current username is 'insecure'. Changing now."
-    # We won't actually change the username (too destructive for a game), but we'll fake the output.
-    echo "usermod: user 'insecure' has been created. Please log out to continue."
-    ;;
-  7)
-    echo "Enforcing a 1-character password history. You may not use any letter you've used before."
-    ;;
-  8)
-    # The "Keyboard Ghost"
-    echo "Disabling your 'e', 't', and 'a' keys for this session to enable entropy."
-    xmodmap -e "keycode 26 = " 2>/dev/null # 'e'
-    xmodmap -e "keycode 28 = " 2>/dev/null # 't'
-    xmodmap -e "keycode 38 = " 2>/dev/null # 'a'
-    echo "Security is about sacrifice."
-    ;;
-  9)
-    echo "I'm locking your account for 'security reasons'."
-    # Requires sudo NOPASSWD for passwd
-    sudo passwd -l $(whoami) 2>/dev/null
-    echo "Account locked. Please contact your local administrator."
-    ;;
-  10)
-    # The Nuclear Option: The Entropy Singularity
-    echo "CRITICAL VULNERABILITY: password has been leaked, please change it now."
+  # Randomly pick an impossible reason to reject
+  REASONS=(
+    "Password must contain the current price of Bitcoin."
+    "Password length must be a prime number larger than 1,000."
+    "Password must be a valid LaTeX equation for General Relativity."
+    "Password must contain at least three distinct dead languages."
+    "Your password contains more than three vowels. To save database space, please use a more consonant-heavy string."
+    "Password updates are currently disabled because Mercury is in retrograde. Please try again when the celestial bodies are better aligned for data integrity."
+    "Your password contains too many 'heavy' letters (g, y, p, q, j) that hang below the baseline. This causes the database to become bottom-heavy and slow."
+    "The sum of the digits in your password equals 13. For the safety of our servers, we do not accept unlucky integers."
+    "You used the letter 'E' four times. Our 'E' keys are currently on a mandatory rest cycle due to high volume. Please use more 'Z's or 'Q's."
+    "The system has detected a 'sarcastic tone' in your character selection. Please try again with a more professional attitude."
+    "Our AI predicted you were going to choose this password three weeks ago. Since it’s no longer a surprise, it’s no longer secure."
+  )
 
-    while true; do
-      echo -n "Enter new UNIX password: "
-      read -s pass
-      echo -e "\n"
-
-      # Randomly pick an impossible reason to reject
-      REASONS=(
-        "Password must contain the current price of Bitcoin."
-        "Password length must be a prime number larger than 1,000."
-        "Password must be a valid LaTeX equation for General Relativity."
-        "Password must contain at least three distinct dead languages."
-        "Your password contains more than three vowels. To save database space, please use a more consonant-heavy string."
-        "Password updates are currently disabled because Mercury is in retrograde. Please try again when the celestial bodies are better aligned for data integrity."
-        "Your password contains too many 'heavy' letters (g, y, p, q, j) that hang below the baseline. This causes the database to become bottom-heavy and slow."
-        "The sum of the digits in your password equals 13. For the safety of our servers, we do not accept unlucky integers."
-        "You used the letter 'E' four times. Our 'E' keys are currently on a mandatory rest cycle due to high volume. Please use more 'Z's or 'Q's."
-        "The system has detected a 'sarcastic tone' in your character selection. Please try again with a more professional attitude."
-        "Our AI predicted you were going to choose this password three weeks ago. Since it’s no longer a surprise, it’s no longer secure."
-      )
-
-      SELECTED_REASON=${REASONS[$RANDOM % ${#REASONS[@]}]}
-      echo "PASSWORD REJECTED: $SELECTED_REASON"
-      sleep 1
-      echo "Try again."
-    done
-    ;;
-  *)
-    echo "Invalid severity. Your credentials have been voided."
-    ;;
-esac
+  SELECTED_REASON=${REASONS[$RANDOM % ${#REASONS[@]}]}
+  echo "PASSWORD REJECTED: $SELECTED_REASON"
+  sleep 1
+  echo "Try again."
+done
