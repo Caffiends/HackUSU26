@@ -1,9 +1,8 @@
 #!/bin/bash
 
 # --- Configuration ---
-PROJECT="dropship"
-REPO_URL="https://raw.githubusercontent.com/Caffiends/HackUSU26/refs/heads/main/"
-INSTALL_DIR="/opt/$PROJECT"
+PROJECT="shame"
+INSTALL_DIR="/usr/local/bin/$PROJECT"
 VENV_DIR="$INSTALL_DIR/venv"
 BACKUP_DIR="$HOME/.${PROJECT}_backups"
 
@@ -15,5 +14,10 @@ fi
 
 echo "Uninstalling $PROJECT... wimp"
 
-# Remove binaries
+# Revert rc Files
+rm -rf "$HOME/.zshrc"
+[[ -f "$BACKUP_DIR/.bashrc.bak" ]] && cp "$BACKUP_DIR/.bashrc.bak" "$HOME/.bashrc"
+[[ -f "$BACKUP_DIR/.zshrc.bak" ]] && cp "$BACKUP_DIR/.zshrc.bak" "$HOME/.zshrc"
 
+# Remove Files
+rm -rf "$INSTALL_DIR"
