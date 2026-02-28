@@ -18,13 +18,13 @@ echo "🚀 Starting $PROJECT Universal Installation..."
 # 1. Detect Package Manager and Install Dependencies
 install_pkg() {
     if command -v apt-get &>/dev/null; then
-        apt-get update && apt-get install -y zsh python3-venv python3-pip
+        apt-get update && apt-get install -y zsh git python3-pip
     elif command -v dnf &>/dev/null; then
-        dnf install -y zsh python3 python3-pip
+        dnf install -y zsh git python3 python3-pip
     elif command -v pacman &>/dev/null; then
-        pacman -Syu --noconfirm zsh python python-pip
+        pacman -Syu --noconfirm zsh git python python-pip
     elif command -v zypper &>/dev/null; then
-        zypper install -y zsh python3 python3-pip
+        zypper install -y zsh git python3 python3-pip
     else
         echo "❌ No supported package manager found (apt, dnf, pacman, zypper). WTF?"
         exit 1
@@ -41,15 +41,10 @@ mkdir -p "$INSTALL_DIR" "$BACKUP_DIR"
 # 3. Download Source Code
 git clone "$REPO_URL"
 cp ./HackUSU26/src/* "$INSTALL_DIR/."
-chmod +x "$INSTALL_DIR/typo-*"
+sleep 1
+cd "$INSTALL_DIR" && chmod +x "typo-*"
 
-# 4. Isolated Python Environment
-echo "🐍 Setting up Python terminal surveillance... (the poor-man's keylogger)"
-python3 -m venv "$VENV_DIR"
-"$VENV_DIR/bin/pip" install --upgrade pip
-# If you have a requirements.txt, run: "$VENV_DIR/bin/pip" install -r requirements.txt
-
-# 5. Respectful Migration of Existing Shell Setup
+# 4. Respectful Migration of Existing Shell Setup
 echo "Migrating aliases and PATH from .bashrc..."
 if [[ -f "$HOME/.bashrc" ]]; then
     {
@@ -58,16 +53,16 @@ if [[ -f "$HOME/.bashrc" ]]; then
     } >> "$HOME/.zshrc"
 fi
 
-# 6. Zsh Setup
-cat ./HackUSU26/append.zsh >> ~/.zshrc
+# 5. Zsh Setup
+tee $(cat ./HackUSU26/append.zsh) >> ~/.zshrc
 
-# 7. Finalize
+# 6. Finalize
 rm -rf ./HackUSU26
 
 chsh -s "$(which zsh)" "$whoami"
 echo "✅ $PROJECT successfully installed. Your commands will be logged locally and will not leave your machine."
 echo "Your SH-ame is your own."
 
-# 8. Restart Shell
+# 7. Restart Shell
 echo "Activating... good luck lol."
 exec zsh
