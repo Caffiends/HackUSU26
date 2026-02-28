@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import sqlite3
 import time
 from pathlib import Path
@@ -40,61 +39,29 @@ def main():
     print(f"Accuracy:              {accuracy:.2f}%")
     print(f"Max Correct Streak:    {max_streak}")
     print(f"Current Streak:        {current_streak}")
-    print(f"Uptime:                {format_uptime(uptime)}")
-    print()
+    print(f"Uptime:                {format_uptime(uptime)}\n")
 
-    # Top commands
     print("Top Commands:")
-    c.execute("""
-        SELECT name, correct
-        FROM commands
-        ORDER BY correct DESC
-        LIMIT 5
-    """)
-    rows = c.fetchall()
-    for name, count in rows:
+    c.execute("SELECT name, correct FROM commands ORDER BY correct DESC LIMIT 5")
+    for name, count in c.fetchall():
         print(f"  {name:15} {count}")
 
-    print()
-
-    # Top mistypes
-    print("Top Mistyped Commands:")
-    c.execute("""
-        SELECT name, count
-        FROM mistypes
-        ORDER BY count DESC
-        LIMIT 5
-    """)
-    rows = c.fetchall()
-    for name, count in rows:
+    print("\nTop Mistyped Commands:")
+    c.execute("SELECT name, count FROM mistypes ORDER BY count DESC LIMIT 5")
+    for name, count in c.fetchall():
         print(f"  {name:15} {count}")
 
-    print()
-
-    # Least mistyped
-    c.execute("""
-        SELECT name, count
-        FROM mistypes
-        ORDER BY count ASC
-        LIMIT 1
-    """)
+    print("\nLeast Mistyped Command:")
+    c.execute("SELECT name, count FROM mistypes ORDER BY count ASC LIMIT 1")
     row = c.fetchone()
     if row:
-        print(f"Least Mistyped Command: {row[0]} ({row[1]} times)")
+        print(f"  {row[0]} ({row[1]} times)")
     else:
-        print("Least Mistyped Command: None")
+        print("  None")
 
-    print()
-
-    # Per-command ratios
-    print("Per-Command Accuracy:")
-    c.execute("""
-        SELECT name, correct, incorrect
-        FROM commands
-        ORDER BY correct DESC
-    """)
-    rows = c.fetchall()
-    for name, corr, inc in rows:
+    print("\nPer-Command Accuracy:")
+    c.execute("SELECT name, correct, incorrect FROM commands ORDER BY correct DESC")
+    for name, corr, inc in c.fetchall():
         total_cmd = corr + inc
         ratio = (corr / total_cmd * 100) if total_cmd else 0
         print(f"  {name:15} {ratio:6.2f}%  (C:{corr} / I:{inc})")
