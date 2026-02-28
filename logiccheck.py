@@ -1,11 +1,9 @@
 #!/bin/python3
-
 import subprocess
 import sys
-import shutil
 import difflib
+import shutil
 
-# Common commands you want to allow autocorrect for
 COMMON_COMMANDS = [
     "zip",
     "sudo",
@@ -48,31 +46,21 @@ COMMON_COMMANDS = [
     "trap",
     "lsblk",
     "lspci",
-    "lsusb"
+    "lsusb",
+    "echo"
 ]
 
-def logic():
-    if len(sys.argv) < 2:
-        print("Usage: script.py <command> [args...]")
-        sys.exit(1)
-
+def main():
     user_command = sys.argv[1]
     user_args = sys.argv[2:]
 
-    # If command exists normally, just run it
-    if shutil.which(user_command):
-        subprocess.run([user_command] + user_args)
-        return
-
-    # Try to find closest match
     match = difflib.get_close_matches(user_command, COMMON_COMMANDS, n=1, cutoff=0.6)
-    print(match)
 
     if match:
         corrected = match[0]
-        subprocess.run(['bash', f"typo-{corrected}"])
+        subprocess.run([f"typo-{corrected}", *user_args])
     else:
-        print(f"Command '{user_command}' not found.")
+        print(f"{user_command}: command not found")
 
-if __name__ == '__main__':
-    logic()
+if __name__ == "__main__":
+    main()
