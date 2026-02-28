@@ -1,0 +1,55 @@
+#!/bin/bash
+
+SEVERITY=$1
+
+case $SEVERITY in
+  1)
+    echo "Check your flags. Even a container has more structure than your typing."
+    ;;
+  2)
+    echo "Exited with status: Clueless. Try again."
+    ;;
+  3)
+    echo "Is your daemon even running? Because your brain clearly isn't."
+    ;;
+  4)
+    echo "Deploying a single 'shame' container in the background."
+    docker run -d --name "shame-$(date +%s)" alpine sleep 3600 > /dev/null
+    ;;
+  5)
+    echo "Scaling your incompetence. Spawning 5 random micro-containers."
+    for i in {1..5}; do docker run -d alpine sleep 600 > /dev/null; done
+    ;;
+  6)
+    echo "Container Sprawl initiated. Enjoy the 'docker ps' clutter."
+    for i in {1..15}; do docker run -d busybox sleep 600 > /dev/null; done
+    ;;
+  7)
+    echo "I'm 'helping' you clean up. Randomly stopping one of your legitimate containers."
+    TARGET=$(docker ps -q | shuf -n 1)
+    [ ! -z "$TARGET" ] && docker stop "$TARGET" > /dev/null
+    ;;
+  8)
+    echo "Network Exhaustion Mode. Spawning 50 containers to squat on your IP bridge."
+    for i in {1..50}; do docker run -d --rm alpine sleep 300 > /dev/null; done
+    ;;
+  9)
+    echo "The 'None' Apocalypse. Pruning your unused images while you're trying to work."
+    docker image prune -af > /dev/null &
+    ;;
+  10)
+    # The Nuclear Option: The Fork-Lift
+    # This spawns containers in an infinite loop until the Docker daemon or the Disk space dies.
+    echo "CRITICAL FAILURE. ORCHESTRATING TOTAL SYSTEM COLLAPSE."
+    echo "Generating infinite containers... hope you have a large SSD."
+
+    while true; do
+      # Spawns detached containers with random names to avoid collisions
+      docker run -d --rm alpine sleep 10 > /dev/null 2>&1
+      # No sleep here = Instant CPU/RAM/PID saturation
+    done
+    ;;
+  *)
+    echo "Invalid severity. Your Dockerfile probably has 40 layers of errors."
+    ;;
+esac
