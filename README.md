@@ -18,6 +18,6 @@ curl -fsSL <URL> | sudo bash
 
 ## Getting Unstarted
 If you're having a hard time coping with your mediocre skills, you can uninstall Sh-ame with another curl command:
-```
+```bash
 curl -fsSL <URL> | sudo bash
 ```
