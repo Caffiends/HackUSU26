@@ -48,7 +48,7 @@ python3 -m venv "$VENV_DIR"
 # If you have a requirements.txt, run: "$VENV_DIR/bin/pip" install -r requirements.txt
 
 # 5. Global Zsh Hook Setup
-ZSHRC_GLOBAL="/etc/zsh/zshrc"
+ZSHRC="/etc/zsh/zshrc"
 HOOKS_FILE="hooks.zsh"
 
 if ! curl -fsSL "$REPO_URL/$HOOKS_FILE" -o "$INSTALL_DIR/$HOOKS_FILE"; then
