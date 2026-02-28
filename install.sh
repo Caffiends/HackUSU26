@@ -3,7 +3,7 @@
 # --- Configuration ---
 PROJECT="dropship"
 REPO_URL="https://raw.githubusercontent.com/Caffiends/HackUSU26/refs/heads/main/"
-INSTALL_DIR="/opt/$PROJECT"
+INSTALL_DIR="/usr/local/bin/$PROJECT"
 VENV_DIR="$INSTALL_DIR/venv"
 BACKUP_DIR="$HOME/.${PROJECT}_backups"
 
